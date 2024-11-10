@@ -1,0 +1,101 @@
+Modelo,Marca,Nombre,Modelo_Auto,Año_Auto,Precio,Existencias
+Mishimoto MMRAD,Fram,bujía,Mazda,1999,369.57,196
+Bosch 96168,Denso,faros,Chevrolet,1996,199.83,177
+Optima RedTop,SKF,filtro de aire,Honda,2006,458.09,41
+Optima RedTop,Fram,amortiguadores,Honda,1995,171.86,177
+Mishimoto MMRAD,Bosch,bateria,Chevrolet,1999,182.23,180
+Optima RedTop,Bosch,amortiguadores,Nissan,2000,37.55,0
+Bosch S5,ACDelco,faros,Honda,2007,251.63,269
+Optima RedTop,ACDelco,bomba de agua,Nissan,2009,153.22,288
+Bosch 96168,ACDelco,amortiguadores,Nissan,2010,26.4,215
+ACDelco 334-2114,Fram,filtro de aceite,Mazda,1998,481.49,197
+ACDelco 334-2114,Denso,bujía,Nissan,2012,462.03,274
+Bosch 96168,Motorcraft,bujía,Nissan,2006,214.26,54
+ACDelco 334-2114,Denso,amortiguadores,Ford,1988,301.99,207
+Bosch S5,Motorcraft,amortiguadores,Honda,1993,235.24,203
+Optima RedTop,Bosch,filtro de aire,Toyota,1999,96.85,260
+Mishimoto MMRAD,ACDelco,bateria,Nissan,2002,102.47,299
+ACDelco 334-2114,Denso,bateria,Ford,2003,458.98,158
+Mishimoto MMRAD,Bosch,filtro de aire,Honda,1995,127.71,14
+Optima RedTop,SKF,bateria,Nissan,1999,183.16,264
+Bosch S5,ACDelco,faros,Mazda,2002,455.32,255
+Bosch 96168,Bosch,freno de disco,Honda,1993,128.97,254
+Mishimoto MMRAD,Bosch,amortiguadores,Mazda,2011,325.58,150
+Mishimoto MMRAD,SKF,faros,Nissan,2004,489.41,211
+Bosch 96168,Fram,filtro de aire,Honda,1993,159.66,109
+ACDelco 334-2114,Bosch,faros,Toyota,2004,246.06,46
+ACDelco 334-2114,Bosch,amortiguadores,Chevrolet,2012,63.53,185
+Mishimoto MMRAD,Denso,amortiguadores,Mazda,1989,11.91,79
+Bosch S5,Denso,amortiguadores,Honda,1995,20.47,66
+ACDelco 334-2114,Fram,freno de disco,Honda,1985,257.11,58
+ACDelco 334-2114,Fram,filtro de aire,Honda,2009,387.14,298
+Mishimoto MMRAD,Bosch,bomba de agua,Mazda,1993,36.07,113
+Bosch S5,Denso,turbo,Nissan,2000,395.02,249
+Optima RedTop,ACDelco,bateria,Nissan,1996,448.54,123
+Optima RedTop,ACDelco,filtro de aceite,Nissan,2001,54.95,250
+Bosch 96168,SKF,bujía,Mazda,2008,374.02,124
+Mishimoto MMRAD,Bosch,bateria,Nissan,2002,25.98,230
+Bosch 96168,Fram,amortiguadores,Nissan,2010,472.1,269
+ACDelco 334-2114,ACDelco,turbo,Honda,1999,36.27,286
+ACDelco 334-2114,Motorcraft,freno de disco,Toyota,1999,230.13,186
+ACDelco 334-2114,ACDelco,filtro de aire,Chevrolet,2010,290.87,267
+Optima RedTop,Fram,bateria,Honda,2003,88.63,66
+Bosch S5,Denso,bujía,Ford,1999,476.59,181
+Bosch S5,Denso,amortiguadores,Nissan,1998,209.53,265
+Bosch 96168,Fram,amortiguadores,Nissan,1985,200.62,47
+Bosch S5,Bosch,bomba de agua,Nissan,2010,119.42,238
+Mishimoto MMRAD,ACDelco,filtro de aire,Nissan,2007,493.05,168
+Bosch S5,ACDelco,bomba de agua,Ford,2012,234.38,275
+Optima RedTop,SKF,filtro de aire,Honda,2012,162.62,39
+Mishimoto MMRAD,SKF,bateria,Ford,2008,284.51,104
+Optima RedTop,Denso,bujía,Honda,2006,244.15,144
+Mishimoto MMRAD,Bosch,bomba de agua,Honda,1994,363.86,127
+ACDelco 334-2114,Denso,filtro de aire,Mazda,1994,348.41,278
+Mishimoto MMRAD,Bosch,amortiguadores,Honda,1994,187.02,105
+Mishimoto MMRAD,ACDelco,bateria,Honda,1987,255.33,188
+Bosch 96168,Motorcraft,filtro de aire,Nissan,2000,416.91,216
+Optima RedTop,SKF,freno de disco,Ford,2009,242.49,121
+Mishimoto MMRAD,Denso,freno de disco,Nissan,2010,280.94,112
+Optima RedTop,Fram,bateria,Chevrolet,1990,174.54,191
+Bosch S5,Denso,bateria,Toyota,2006,37.43,230
+Bosch 96168,Motorcraft,filtro de aceite,Chevrolet,2001,242.65,54
+Optima RedTop,SKF,freno de disco,Chevrolet,2010,384.91,11
+Bosch 96168,SKF,filtro de aire,Honda,1992,96.83,96
+Bosch 96168,Fram,freno de disco,Mazda,2010,122.77,145
+Bosch S5,Motorcraft,faros,Toyota,2011,186.19,174
+Bosch 96168,Fram,filtro de aceite,Mazda,2012,496.33,246
+Optima RedTop,SKF,filtro de aceite,Toyota,1988,441.38,184
+Bosch 96168,Denso,bateria,Honda,2011,289.49,14
+Bosch S5,Bosch,bateria,Toyota,2010,368.26,82
+Bosch 96168,Fram,faros,Ford,1997,381.21,200
+Bosch S5,SKF,bomba de agua,Mazda,2008,36.39,19
+Bosch S5,Denso,bujía,Nissan,1999,159.32,65
+Bosch 96168,Denso,filtro de aceite,Honda,1999,216.98,266
+Optima RedTop,Bosch,filtro de aceite,Chevrolet,1992,157.75,295
+ACDelco 334-2114,Bosch,amortiguadores,Mazda,2001,463.86,62
+Mishimoto MMRAD,Fram,faros,Chevrolet,1993,341.92,110
+Optima RedTop,Denso,turbo,Mazda,2012,127.93,50
+Optima RedTop,Fram,turbo,Ford,2008,54.1,143
+ACDelco 334-2114,ACDelco,freno de disco,Ford,2013,261.94,29
+ACDelco 334-2114,Bosch,faros,Toyota,2010,380.21,75
+ACDelco 334-2114,Denso,filtro de aire,Toyota,1988,468.24,300
+Optima RedTop,Bosch,bujía,Honda,1994,491.08,126
+Bosch 96168,Bosch,bomba de agua,Mazda,1991,470.85,6
+Bosch S5,Fram,bateria,Chevrolet,1984,115.3,102
+Mishimoto MMRAD,SKF,amortiguadores,Chevrolet,2000,211.73,242
+Optima RedTop,ACDelco,filtro de aceite,Honda,1985,341.75,11
+Mishimoto MMRAD,Motorcraft,freno de disco,Honda,2001,263.87,219
+Mishimoto MMRAD,Fram,turbo,Ford,2002,245.8,104
+Optima RedTop,SKF,faros,Ford,1995,259.02,178
+ACDelco 334-2114,SKF,bomba de agua,Chevrolet,2010,232.14,43
+Bosch 96168,Motorcraft,bomba de agua,Chevrolet,2011,231.26,114
+Mishimoto MMRAD,SKF,turbo,Mazda,2011,352.14,147
+Mishimoto MMRAD,Denso,bateria,Ford,1978,22.15,85
+Mishimoto MMRAD,Fram,filtro de aceite,Nissan,2012,193.39,263
+ACDelco 334-2114,Bosch,bomba de agua,Toyota,1993,242.43,46
+Optima RedTop,SKF,bomba de agua,Chevrolet,1989,361.64,110
+Bosch S5,Motorcraft,freno de disco,Ford,2011,202.87,276
+Mishimoto MMRAD,Denso,bateria,Ford,1995,51.53,293
+Optima RedTop,ACDelco,bujía,Mazda,1995,271.49,196
+Mishimoto MMRAD,Denso,amortiguadores,Honda,1998,57.94,193
+Bosch S5,SKF,bomba de agua,Chevrolet,1999,55.06,259
