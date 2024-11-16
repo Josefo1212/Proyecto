@@ -1,12 +1,9 @@
-modelo,marca,placa,color,year,kilometraje,rentado,motor,precio_renta,ced_cliente,fecha_de_entrega
-Cherokee,Jeep,0027-WEJ,Mauv,2001,153866,0,4 cilindros,111.27,95811705,6/29/2018
-M,Infiniti,0077-ZNW,Pink,2004,145061,0,V8,176.95,23651652,9/17/2024
+modelo,marca,placa,color,year,kilometraje,rentado,motor,precioRenta,cedCliente,fechaEntrega
 Ranger,Ford,0111-HJF,Indigo,1984,26452,0,Turbo,142.2,99751863,2/3/2000
 Vision,Eagle,0266-NHA,Khaki,1993,196066,0,V8,152.36,37725742,3/12/2021
-LX,Lexus,0330-DJD,Indigo,1997,32039,0,Turbo,50.91,6078700,12/11/2020
+LX,Lexus,0330-DJD,morado,2000,2200,1,BiTURBO,500,6078700,20/12/2010
 Quattroporte,Maserati,0382-JMW,Red,2010,120253,0,4 cilindros,52.22,13403947,4/6/2000
 V50,Volvo,0635-IBE,Blue,2008,69098,0,V6,62.61,62841946,5/16/2012
-Mazda3,Mazda,0783-JUL,Mauv,2009,139755,0,Híbrido,146.82,52726659,6/27/2012
 Vantage,Aston Martin,0824-QHU,Crimson,2010,140452,0,V8,178.06,69652746,4/5/2011
 Coachbuilder,Buick,0850-MAD,Green,1992,56204,0,Turbo,115.34,26674928,8/5/2000
 Mustang,Ford,1170-OQT,Fuscia,1986,38612,0,4 cilindros,84.72,72634755,11/13/2022
@@ -26,6 +23,7 @@ CR-V,Honda,2458-GLJ,Turquoise,2003,109061,0,V8,50.12,9993894,1/27/2014
 Envoy,GMC,2549-GLT,Fuscia,1998,26256,0,4 cilindros,193.83,3851388,1/7/2017
 Corolla,Toyota,2619-IUA,Orange,2011,163190,0,V8,75.24,59343362,2/1/2004
 750,BMW,2685-FAP,Mauv,2006,128132,0,Turbo,184.32,65659921,5/30/2017
+mustang,ford,303-DDT,negro,2006,1200,1,V8,500,31675234,12/12/2020
 Mighty Max,Mitsubishi,3038-FMV,Aquamarine,1995,124838,0,V6,73.56,2527528,6/16/2009
 Contour,Ford,3254-TCO,Green,1998,123086,0,V6,92.48,3401250,10/7/2019
 SLR McLaren,Mercedes-Benz,3383-DRA,Violet,2006,78052,0,4 cilindros,126,9986962,8/9/2004

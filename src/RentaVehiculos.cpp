@@ -44,6 +44,10 @@ struct Repuestos {
 map<string, Vehiculos> vehiculosMap;
 map<int, Clientes> clientesMap;
 map<string, Repuestos> repuestosMap;
+// Función para generar la clave compuesta
+string generarClaveRepuesto(const string &modeloRepuesto, const string &marcaRepuesto) {
+    return modeloRepuesto + "_" + marcaRepuesto;
+}
 
 // Funciones para leer vehículos, clientes y repuestos
 void leerVehiculos(const string &coches) {
@@ -116,6 +120,8 @@ void leerRepuestos(const string &repuestos) {
         cout << "No se pudo abrir el archivo " << repuestos << endl;
         return;
     }
+    repuestosMap.clear();
+
     getline(archivoRepuestos, linea); // Leer encabezado y descartar
     while (getline(archivoRepuestos, linea)) {
         Repuestos repuesto;
@@ -129,7 +135,8 @@ void leerRepuestos(const string &repuestos) {
         ss >> repuesto.precioRepuesto;
         ss.ignore();
         ss >> repuesto.existencias;
-        repuestosMap[repuesto.modeloRepuesto] = repuesto;
+        string clave = generarClaveRepuesto(repuesto.modeloRepuesto, repuesto.marcaRepuesto);
+        repuestosMap[clave] = repuesto;
     }
     archivoRepuestos.close();
 }
@@ -256,12 +263,14 @@ void insertarRepuesto() {
     getline(cin, repuesto.nombreRepuesto);
     getline(cin, repuesto.modeloAuto);
     cin >> repuesto.yearAuto >> repuesto.precioRepuesto >> repuesto.existencias;
-    repuestosMap[repuesto.modeloRepuesto] = repuesto;
+    string clave = generarClaveRepuesto(repuesto.modeloRepuesto, repuesto.marcaRepuesto);
+    repuestosMap[clave] = repuesto;
 }
 
-void actualizarRepuesto(const string &modeloRepuesto) {
-    if (repuestosMap.find(modeloRepuesto) != repuestosMap.end()) {
-        Repuestos &repuesto = repuestosMap[modeloRepuesto];
+void actualizarRepuesto(const string &modeloRepuesto, const string &marcaRepuesto) {
+    string clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto);
+    if (repuestosMap.find(clave) != repuestosMap.end()) {
+        Repuestos &repuesto = repuestosMap[clave];
         cout << "Ingrese nuevos datos (marcaRepuesto, nombreRepuesto, modeloAuto, yearAuto, precioRepuesto, existencias): " << endl;
         cin.ignore();
         getline(cin, repuesto.marcaRepuesto);
@@ -273,8 +282,9 @@ void actualizarRepuesto(const string &modeloRepuesto) {
     }
 }
 
-void borrarRepuesto(const string &modeloRepuesto) {
-    if (repuestosMap.erase(modeloRepuesto)) {
+void borrarRepuesto(const string &modeloRepuesto, const string &marcaRepuesto) {
+    string clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto);
+    if (repuestosMap.erase(clave)) {
         cout << "Repuesto eliminado." << endl;
     } else {
         cout << "Repuesto no encontrado." << endl;
@@ -302,24 +312,25 @@ int main() {
     int opcion;
     string placa;
     int cedula;
-    string modeloRepuesto;
+    string modeloRepuesto, marcaRepuesto;
 
     do {
-        cout << "Seleccione una opcion: " << endl;
-        cout << "1. Insertar Vehiculo" << endl;
-        cout << "2. Actualizar Vehiculo" << endl;
-        cout << "3. Borrar Vehiculo" << endl;
-        cout << "4. Leer Vehiculos" << endl;
-        cout << "5. Guardar Vehiculos" << endl;
-        cout << "6. Insertar Cliente" << endl;
-        cout << "7. Actualizar Cliente" << endl;
-        cout << "8. Borrar Cliente" << endl;
-        cout << "9. Leer Clientes" << endl;
-        cout << "10. Insertar Repuesto" << endl;
-        cout << "11. Actualizar Repuesto" << endl;
-        cout << "12. Borrar Repuesto" << endl;
-        cout << "13. Leer Repuestos" << endl;
-        cout << "14. Salir" << endl;
+        cout << "Seleccione una opcion: " << endl
+         << "1. Insertar Vehiculo" << endl
+         << "2. Actualizar Vehiculo" << endl
+         << "3. Borrar Vehiculo" << endl
+         << "4. Leer Vehiculos" << endl
+         << "5. Guardar Vehiculos" << endl
+         << "6. Insertar Cliente" << endl
+         << "7. Actualizar Cliente" << endl
+         << "8. Borrar Cliente" << endl
+         << "9. Leer Clientes" << endl
+         << "10. Insertar Repuesto" << endl
+         << "11. Actualizar Repuesto" << endl
+         << "12. Borrar Repuesto" << endl
+         << "13. Leer Repuestos" << endl
+         << "14. Realizar consultas especificas" << endl
+        << "15. Salir"<<endl;
         cin >> opcion;
 
         switch (opcion) {
@@ -355,7 +366,7 @@ int main() {
                 break;
             case 5:
                 guardarVehiculos("../bin/coches.csv");
-                cout << "Vehículos guardados en el archivo." << endl;
+                cout << "Vehículos guardados." << endl;
                 break;
             case 6:
                 insertarCliente();
@@ -380,26 +391,101 @@ int main() {
                 cout << "Ingrese el modelo del repuesto a actualizar: ";
                 cin.ignore(); 
                 getline(cin, modeloRepuesto);
-                actualizarRepuesto(modeloRepuesto);
+                cout<<"Ingrese la marca del repuesto a actualizar: ";
+                getline(cin, marcaRepuesto);
+                actualizarRepuesto(modeloRepuesto, marcaRepuesto);
                 break;
             case 12:
                 cout << "Ingrese el modelo del repuesto a borrar: ";
                 cin.ignore(); 
                 getline(cin, modeloRepuesto);
-                borrarRepuesto(modeloRepuesto);
+                cout<<"Ingrese la marca del repuesto a borrar: ";
+                getline(cin, marcaRepuesto);
+                borrarRepuesto(modeloRepuesto, marcaRepuesto);
                 break;
             case 13:
                 leerRepuestosDesdeMap();
                 break;
-            case 14:
+                case 14: {
+                int subOpcion;
+                cout << "Seleccione la consulta que desea realizar: " << endl
+                 << "1. Consultar un Vehiculo" << endl
+                 << "2. Consultar un Cliente" << endl
+                 << "3. Consultar un Repuesto" << endl;
+                cin >> subOpcion;
+                string clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto);
+
+                switch (subOpcion) {
+                    case 1:
+                        cout << "Ingrese la placa del vehiculo: ";
+                        cin >> placa;
+                        if (vehiculosMap.find(placa) != vehiculosMap.end()) {
+                            const Vehiculos &vehiculo = vehiculosMap[placa];
+                            cout << vehiculo.modelo << ", "
+                                 << vehiculo.marca << ", "
+                                 << vehiculo.placa << ", "
+                                 << vehiculo.color << ", "
+                                 << vehiculo.year << ", "
+                                 << vehiculo.kilometraje << ", "
+                                 << (vehiculo.rentado ? "1" : "0") << ", "
+                                 << vehiculo.motor << ", "
+                                 << vehiculo.precioRenta << ", "
+                                 << vehiculo.cedCliente << ", "
+                                 << vehiculo.fechaEntrega << endl;
+                        } else {
+                            cout << "Vehiculo no encontrado." << endl;
+                        }
+                        break;
+                        case 2:cout << "Ingrese la cedula del cliente: ";
+                        cin >> cedula;
+                        if (clientesMap.find(cedula) != clientesMap.end()) {
+                            const Clientes &cliente = clientesMap[cedula];
+                            cout << cliente.nombre << ", "
+                                 << cliente.apellido << ", "
+                                 << cliente.cedula << ", "
+                                 << cliente.email <<", "
+                                 <<cliente.vehiculosRentados << ", "
+                                 << cliente.direccion << ", "
+                                 <<cliente.activo<< endl;
+                                 
+                        } else {
+                            cout << "Cliente no encontrado." << endl;
+                        }
+                        break;
+                    case 3:
+                        cout << "Ingrese el modelo del repuesto: ";
+                        cin.ignore();
+                        getline(cin, modeloRepuesto);
+                        cout<<"Ingrese la marca del repuesto: ";
+                        getline(cin, marcaRepuesto);
+                        
+                        if (repuestosMap.find(clave) != repuestosMap.end()) {
+                            const Repuestos &repuesto = repuestosMap[clave];
+                            cout << repuesto.modeloRepuesto << ", "
+                                 << repuesto.marcaRepuesto << ", "
+                                 << repuesto.nombreRepuesto << ", "
+                                 << repuesto.modeloAuto << ", "
+                                 << repuesto.yearAuto << ", "
+                                 << repuesto.precioRepuesto << ", "
+                                 << repuesto.existencias << endl;
+                        } else {
+                            cout << "Repuesto no encontrado." << endl;
+                        }
+                        break;
+                        default:
+                        cout<<"Opcion no valida."<<endl;
+                        break;
+                }
+            }
+                break;
+            case 15:
                 cout << "Saliendo." << endl;
                 break;
             default:
-                cout << "Opción no válida." << endl;
+                cout << "Opcion no valida." << endl;
                 break;
         }
-    } while (opcion != 14);
-
+    } while (opcion != 15);
+    
     return 0;
 }
-
