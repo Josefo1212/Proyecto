@@ -1,4 +1,4 @@
-cedula,nombre,apellido,email,cantidad_vehiculos_rentados,direccion,activo
+cedula,nombre,apellido,email,vehiculosRentados,direccion,activo
 1279521,Giraud,Mansour,gmansour12@list-manage.com,4,35576 2nd Plaza,0
 1754124,Kev,Vinker,kvinker1c@g.co,23,361 Boyd Avenue,0
 2401179,Beverlee,Maisey,bmaisey11@taobao.com,9,7270 Randy Park,0

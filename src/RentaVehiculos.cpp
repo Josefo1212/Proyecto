@@ -12,7 +12,7 @@ struct Vehiculos {
     string placa;
     string color;
     int year;
-    int kilometraje;
+    float kilometraje;
     bool rentado;
     string motor;
     float precioRenta;
@@ -45,7 +45,7 @@ map<string, Vehiculos> vehiculosMap;
 map<int, Clientes> clientesMap; 
 map<string, Repuestos> repuestosMap;
 
-// Función para generar la clave compuesta
+// Funcion para generar la clave compuesta
 string generarClaveRepuesto(const string &modeloRepuesto, const string &marcaRepuesto, const string &nombreRepuesto, const string &modeloAuto) {
     return modeloRepuesto + "_" + marcaRepuesto + "_" + nombreRepuesto + "_" + modeloAuto;
 }
@@ -349,20 +349,24 @@ void guardarRepuesto(const string &repuestos) {
     }
     archivoRepuestos.close();
 }
+
 void insertarRepuesto() {
     Repuestos repuesto;
     cout << "Ingrese datos del repuesto (modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto, yearAuto, precioRepuesto, existencias): " << endl;
+    cin.ignore(); 
     getline(cin, repuesto.modeloRepuesto);
     getline(cin, repuesto.marcaRepuesto);
     getline(cin, repuesto.nombreRepuesto);
     getline(cin, repuesto.modeloAuto);
     cin >> repuesto.yearAuto >> repuesto.precioRepuesto >> repuesto.existencias;
-    cin.ignore();
+    cin.ignore(); 
 
     cout << "Confirma la insercion del repuesto? (s/n): ";
     char confirmacion;
     cin >> confirmacion;
     if (confirmacion == 's' || confirmacion == 'S') {
+        string clave = generarClaveRepuesto(repuesto.modeloRepuesto, repuesto.marcaRepuesto, repuesto.nombreRepuesto, repuesto.modeloAuto);
+        repuestosMap[clave] = repuesto;
         guardarRepuesto("../bin/repuestosCoches.csv");
         cout << "Repuesto insertado." << endl;
     } else {
@@ -385,9 +389,12 @@ void actualizarRepuesto(const string &modeloRepuesto, const string &marcaRepuest
         cout << "Confirma los cambios? (s/n): ";
         char confirmacion;
         cin >> confirmacion;
-        if (confirmacion = 's' && confirmacion != 'S') {
+        if (confirmacion == 's' || confirmacion == 'S') {
             guardarRepuesto("../bin/repuestosCoches.csv");
             cout << "Cambios realizados." << endl;
+        } else {
+            repuestosMap[clave] = original;
+            cout << "Cambios revertidos." << endl;
         }
     } else {
         cout << "Repuesto no encontrado." << endl;
@@ -515,12 +522,12 @@ int main() {
                 getline(cin, marcaRepuesto);
                 cout<< "Ingrese el nombre del repuesto a actualizar: ";
                 getline(cin, nombreRepuesto);
-                cout<< "Ingrese el modelo del Vehiculo del repuesto a actualizar";
+                cout<< "Ingrese el modelo del Vehiculo del repuesto a actualizar: ";
                 getline(cin, modeloAuto);
                 actualizarRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
                 break;
             case 11:
-            cout << "Ingrese el modelo del repuesto a borrar: ";
+                cout << "Ingrese el modelo del repuesto a borrar: ";
                 cin.ignore(); 
                 getline(cin, modeloRepuesto);
                 cout << "Ingrese la marca del repuesto a borrar: ";
@@ -528,7 +535,7 @@ int main() {
                 cout << "Ingrese el nombre del repuesto a borrar: ";
                 getline(cin, nombreRepuesto);
                 cout << "Ingrese el modelo del carro del repuesto a borrar: ";
-                getline (cin, modeloAuto);
+                getline(cin, modeloAuto);
                 borrarRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
                 break;
             case 12:
@@ -586,7 +593,10 @@ int main() {
                         getline(cin, modeloRepuesto);
                         cout << "Ingrese la marca del repuesto: ";
                         getline(cin, marcaRepuesto);
-                        
+                        cout << "Ingrese el nombre del repuesto: ";
+                        getline(cin, nombreRepuesto);
+                        cout << "Ingrese el modelo del carro del repuesto: ";
+                        getline(cin, modeloAuto);
                         clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
                         if (repuestosMap.find(clave) != repuestosMap.end()) {
                             const Repuestos &repuesto = repuestosMap[clave];
@@ -602,7 +612,7 @@ int main() {
                         }
                         break;
                     default:
-                        cout<< "Opción no valida." << endl;
+                        cout<< "Opcion no valida." << endl;
                         break;
                 }
             }
@@ -611,7 +621,7 @@ int main() {
                 cout<< "Saliendo." << endl;
                 break;
             default:
-                cout<< "Opción no valida." << endl;
+                cout<< "Opcion no valida." << endl;
                 break;
         }
     } while (opcion != 14);
