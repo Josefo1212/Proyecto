@@ -2,7 +2,6 @@
 #include <fstream>
 #include <sstream>
 #include <string>
-#include <map>
 using namespace std;
 
 // Estructuras de datos
@@ -40,19 +39,19 @@ struct Repuestos {
     int existencias;
 };
 
-// Mapas para almacenar los datos
-map<string, Vehiculos> vehiculosMap;
-map<int, Clientes> clientesMap; 
-map<string, Repuestos> repuestosMap;
 
-// Funcion para generar la clave compuesta
-string generarClaveRepuesto(const string &modeloRepuesto, const string &marcaRepuesto, const string &nombreRepuesto, const string &modeloAuto) {
-    return modeloRepuesto + "_" + marcaRepuesto + "_" + nombreRepuesto + "_" + modeloAuto;
-}
+Vehiculos* vehiculosPtr = nullptr;
+int vehiculosCount = 0;
+
+Clientes* clientesPtr = nullptr;
+int clientesCount = 0;
+
+Repuestos* repuestosPtr = nullptr;
+int repuestosCount = 0;
 
 // Funciones para leer vehículos, clientes y repuestos
 void leerVehiculos(const string &coches) {
-    ifstream archivoVehiculos(coches);
+    ifstream archivoVehiculos("../bin/coches.csv");
     string linea;
 
     if (!archivoVehiculos.is_open()) {
@@ -80,7 +79,15 @@ void leerVehiculos(const string &coches) {
         ss >> vehiculo.cedCliente;
         ss.ignore();
         getline(ss, vehiculo.fechaEntrega, ',');
-        vehiculosMap[vehiculo.placa] = vehiculo;
+
+        Vehiculos* temp = new Vehiculos[vehiculosCount + 1];
+        for (int i = 0; i < vehiculosCount; ++i) {
+            temp[i] = vehiculosPtr[i];
+        }
+        temp[vehiculosCount] = vehiculo;
+        delete[] vehiculosPtr;
+        vehiculosPtr = temp;
+        vehiculosCount++;
     }
     archivoVehiculos.close();
 }
@@ -108,7 +115,15 @@ void leerClientes(const string &clientes) {
         string activo;
         getline(ss, activo, ',');
         cliente.activo = (activo == "1");
-        clientesMap[cliente.cedula] = cliente;
+
+        Clientes* temp = new Clientes[clientesCount + 1];
+        for (int i = 0; i < clientesCount; ++i) {
+            temp[i] = clientesPtr[i];
+        }
+        temp[clientesCount] = cliente;
+        delete[] clientesPtr;
+        clientesPtr = temp;
+        clientesCount++;
     }
     archivoClientes.close();
 }
@@ -121,7 +136,6 @@ void leerRepuestos(const string &repuestos) {
         cout << "No se pudo abrir el archivo " << repuestos << endl;
         return;
     }
-    repuestosMap.clear();
     getline(archivoRepuestos, linea);
     while (getline(archivoRepuestos, linea)) {
         Repuestos repuesto;
@@ -136,8 +150,14 @@ void leerRepuestos(const string &repuestos) {
         ss.ignore();
         ss >> repuesto.existencias;
 
-        string clave = generarClaveRepuesto(repuesto.modeloRepuesto, repuesto.marcaRepuesto, repuesto.nombreRepuesto, repuesto.modeloAuto);
-        repuestosMap[clave] = repuesto;
+        Repuestos* temp = new Repuestos[repuestosCount + 1];
+        for (int i = 0; i < repuestosCount; ++i) {
+            temp[i] = repuestosPtr[i];
+        }
+        temp[repuestosCount] = repuesto;
+        delete[] repuestosPtr;
+        repuestosPtr = temp;
+        repuestosCount++;
     }
     archivoRepuestos.close();
 }
@@ -146,8 +166,8 @@ void leerRepuestos(const string &repuestos) {
 void guardarVehiculos(const string &coches) {
     ofstream archivoVehiculos(coches);
     archivoVehiculos << "modelo,marca,placa,color,year,kilometraje,rentado,motor,precioRenta,cedCliente,fechaEntrega" << endl; // Encabezado
-    for (const auto &pair : vehiculosMap) {
-        const Vehiculos &vehiculo = pair.second;
+    for (int i = 0; i < vehiculosCount; ++i) {
+        const Vehiculos &vehiculo = vehiculosPtr[i];
         archivoVehiculos << vehiculo.modelo << ","
                          << vehiculo.marca << ","
                          << vehiculo.placa << ","
@@ -164,30 +184,32 @@ void guardarVehiculos(const string &coches) {
 }
 
 void actualizarVehiculo(const string &placa) {
-    if (vehiculosMap.find(placa) != vehiculosMap.end()) {
-        Vehiculos original = vehiculosMap[placa];
-        Vehiculos &vehiculo = vehiculosMap[placa];
-        cout << "Ingrese nuevos datos (modelo, marca, color, year, kilometraje, rentado(1/0), motor, precioRenta, cedCliente, fechaEntrega): " << endl;
-        cin >> vehiculo.modelo >> vehiculo.marca >> vehiculo.color >> vehiculo.year >> vehiculo.kilometraje;
-        int rentado;
-        cin >> rentado;
-        vehiculo.rentado = rentado == 1;
-        cin >> vehiculo.motor >> vehiculo.precioRenta >> vehiculo.cedCliente >> vehiculo.fechaEntrega;
+    for (int i = 0; i < vehiculosCount; ++i) {
+        if (vehiculosPtr[i].placa == placa) {
+            Vehiculos original = vehiculosPtr[i];
+            Vehiculos &vehiculo = vehiculosPtr[i];
+            cout << "Ingrese nuevos datos (modelo, marca, color, year, kilometraje, rentado(1/0), motor, precioRenta, cedCliente, fechaEntrega): " << endl;
+            cin >> vehiculo.modelo >> vehiculo.marca >> vehiculo.color >> vehiculo.year >> vehiculo.kilometraje;
+            int rentado;
+            cin >> rentado;
+            vehiculo.rentado = rentado == 1;
+            cin >> vehiculo.motor >> vehiculo.precioRenta >> vehiculo.cedCliente >> vehiculo.fechaEntrega;
 
-        cout << "Confirma los cambios? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            // Guardar cambios en archivo
-            guardarVehiculos("../bin/coches.csv");
-            cout << "Cambios confirmados y guardados." << endl;
-        } else {
-            vehiculosMap[placa] = original;
-            cout << "Cambios revertidos." << endl;
+            cout << "Confirma los cambios? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                // Guardar cambios en archivo
+                guardarVehiculos("../bin/coches.csv");
+                cout << "Cambios confirmados y guardados." << endl;
+            } else {
+                vehiculosPtr[i] = original;
+                cout << "Cambios revertidos." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Vehiculo no encontrado." << endl;
     }
+    cout << "Vehiculo no encontrado." << endl;
 }
 
 void insertarVehiculo() {
@@ -203,7 +225,14 @@ void insertarVehiculo() {
     char confirmacion;
     cin >> confirmacion;
     if (confirmacion == 's' || confirmacion == 'S') {
-        vehiculosMap[vehiculo.placa] = vehiculo;
+        Vehiculos* temp = new Vehiculos[vehiculosCount + 1];
+        for (int i = 0; i < vehiculosCount; ++i) {
+            temp[i] = vehiculosPtr[i];
+        }
+        temp[vehiculosCount] = vehiculo;
+        delete[] vehiculosPtr;
+        vehiculosPtr = temp;
+        vehiculosCount++;
         guardarVehiculos("../bin/coches.csv");
         cout << "Vehiculo insertado." << endl;
     } else {
@@ -212,28 +241,38 @@ void insertarVehiculo() {
 }
 
 void borrarVehiculo(const string &placa) {
-    if (vehiculosMap.find(placa) != vehiculosMap.end()) {
-        cout << "Esta seguro de que desea eliminar el vehículo con placa " << placa << "? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            vehiculosMap.erase(placa);
-            guardarVehiculos("../bin/coches.csv"); 
-            cout << "Vehiculo eliminado." << endl;
-        } else {
-            cout << "Eliminacion cancelada." << endl;
+    for (int i = 0; i < vehiculosCount; ++i) {
+        if (vehiculosPtr[i].placa == placa) {
+            cout << "Esta seguro de que desea eliminar el vehiculo con placa " << placa << "? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                Vehiculos* temp = new Vehiculos[vehiculosCount - 1];
+                for (int j = 0, k = 0; j < vehiculosCount; ++j) {
+                    if (j != i) {
+                        temp[k++] = vehiculosPtr[j];
+                    }
+                }
+                delete[] vehiculosPtr;
+                vehiculosPtr = temp;
+                vehiculosCount--;
+                guardarVehiculos("../bin/coches.csv");
+                cout << "Vehiculo eliminado." << endl;
+            } else {
+                cout << "Eliminacion cancelada." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Vehiculo no encontrado." << endl;
     }
+    cout << "Vehiculo no encontrado." << endl;
 }
 
 // Funciones para manejar clientes
 void guardarClientes(const string &clientes) {
     ofstream archivoClientes(clientes);
     archivoClientes << "cedula,nombre,apellido,email,vehiculosRentados,direccion,activo" << endl; 
-    for (const auto &pair : clientesMap) {
-        const Clientes &cliente = pair.second;
+    for (int i = 0; i < clientesCount; ++i) {
+        const Clientes &cliente = clientesPtr[i];
         archivoClientes << cliente.cedula << ","
                         << cliente.nombre << ","
                         << cliente.apellido << ","
@@ -264,8 +303,15 @@ void insertarCliente() {
     char confirmacion;
     cin >> confirmacion;
     if (confirmacion == 's' || confirmacion == 'S') {
-        clientesMap[cliente.cedula] = cliente;
-        guardarClientes("../bin/clientes.csv"); 
+        Clientes* temp = new Clientes[clientesCount + 1];
+        for (int i = 0; i < clientesCount; ++i) {
+            temp[i] = clientesPtr[i];
+        }
+        temp[clientesCount] = cliente;
+        delete[] clientesPtr;
+        clientesPtr = temp;
+        clientesCount++;
+        guardarClientes("../bin/clientes.csv");
         cout << "Cliente insertado." << endl;
     } else {
         cout << "Insercion cancelada." << endl;
@@ -273,56 +319,68 @@ void insertarCliente() {
 }
 
 void actualizarCliente(int cedula) {
-    if (clientesMap.find(cedula) != clientesMap.end()) {
-        Clientes original = clientesMap[cedula]; 
-        Clientes &cliente = clientesMap[cedula];
-        cout << "Ingrese nuevos datos (nombre, apellido, email, vehiculosRentados, direccion, activo(1/0)): " << endl;
-        cin.ignore();
-        getline(cin, cliente.nombre);
-        getline(cin, cliente.apellido);
-        getline(cin, cliente.email);
-        cin >> cliente.vehiculosRentados;
-        cin.ignore();
-        getline(cin, cliente.direccion);
-        int activo;
-        cin >> activo;
-        cliente.activo = activo == 1;
+    for (int i = 0; i < clientesCount; ++i) {
+        if (clientesPtr[i].cedula == cedula) {
+            Clientes original = clientesPtr[i];
+            Clientes &cliente = clientesPtr[i];
+            cout << "Ingrese nuevos datos (nombre, apellido, email, vehiculosRentados, direccion, activo(1/0)): " << endl;
+            cin.ignore();
+            getline(cin, cliente.nombre);
+            getline(cin, cliente.apellido);
+            getline(cin, cliente.email);
+            cin >> cliente.vehiculosRentados;
+            cin.ignore();
+            getline(cin, cliente.direccion);
+            int activo;
+            cin >> activo;
+            cliente.activo = activo == 1;
 
-        cout << "Confirma los cambios? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            guardarClientes("../bin/clientes.csv");
-            cout << "Cambios confirmados y guardados." << endl;
-        } else {
-            clientesMap[cedula] = original;
-            cout << "Cambios revertidos." << endl;
+            cout << "Confirma los cambios? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                guardarClientes("../bin/clientes.csv");
+                cout << "Cambios confirmados y guardados." << endl;
+            } else {
+                clientesPtr[i] = original;
+                cout << "Cambios revertidos." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Cliente no encontrado." << endl;
     }
+    cout << "Cliente no encontrado." << endl;
 }
 
 void borrarCliente(int cedula) {
-    if (clientesMap.find(cedula) != clientesMap.end()) {
-        cout << "Esta seguro de que desea eliminar el cliente con cedula " << cedula << "? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            clientesMap.erase(cedula);
-            guardarClientes("../bin/clientes.csv"); 
-            cout << "Cliente eliminado." << endl;
-        } else {
-            cout << "Eliminacion cancelada." << endl;
+    for (int i = 0; i < clientesCount; ++i) {
+        if (clientesPtr[i].cedula == cedula) {
+            cout << "Esta seguro de que desea eliminar el cliente con cedula " << cedula << "? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                Clientes* temp = new Clientes[clientesCount - 1];
+                for (int j = 0, k = 0; j < clientesCount; ++j) {
+                    if (j != i) {
+                        temp[k++] = clientesPtr[j];
+                    }
+                }
+                delete[] clientesPtr;
+                clientesPtr = temp;
+                clientesCount--;
+                guardarClientes("../bin/clientes.csv");
+                cout << "Cliente eliminado." << endl;
+            } else {
+                cout << "Eliminacion cancelada." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Cliente no encontrado." << endl;
     }
+    cout << "Cliente no encontrado." << endl;
 }
 
-void leerClientesDesdeMap() {
-    for (const auto& pair : clientesMap) {
-        const Clientes &cliente = pair.second;
+void leerClientesDesdeArray() {
+    for (int i = 0; i < clientesCount; ++i) {
+        const Clientes &cliente = clientesPtr[i];
         cout << cliente.cedula << ", "
              << cliente.nombre << ", "
              << cliente.apellido << ", "
@@ -337,15 +395,15 @@ void leerClientesDesdeMap() {
 void guardarRepuesto(const string &repuestos) {
     ofstream archivoRepuestos(repuestos);
     archivoRepuestos << "Modelo,Marca,Nombre,Modelo_Auto,Year_Auto,Precio,Existencias" << endl; 
-    for (const auto &pair : repuestosMap) {
-        const Repuestos &repuesto = pair.second;
+    for (int i = 0; i < repuestosCount; ++i) {
+        const Repuestos &repuesto = repuestosPtr[i];
         archivoRepuestos << repuesto.modeloRepuesto << ","
-                        << repuesto.marcaRepuesto << ","
-                        << repuesto.nombreRepuesto << ","
-                        << repuesto.modeloAuto << ","
-                        << repuesto.yearAuto << ","
-                        << repuesto.precioRepuesto << ","
-                        << repuesto.existencias << endl;
+                         << repuesto.marcaRepuesto << ","
+                         << repuesto.nombreRepuesto << ","
+                         << repuesto.modeloAuto << ","
+                         << repuesto.yearAuto << ","
+                         << repuesto.precioRepuesto << ","
+                         << repuesto.existencias << endl;
     }
     archivoRepuestos.close();
 }
@@ -365,8 +423,14 @@ void insertarRepuesto() {
     char confirmacion;
     cin >> confirmacion;
     if (confirmacion == 's' || confirmacion == 'S') {
-        string clave = generarClaveRepuesto(repuesto.modeloRepuesto, repuesto.marcaRepuesto, repuesto.nombreRepuesto, repuesto.modeloAuto);
-        repuestosMap[clave] = repuesto;
+        Repuestos* temp = new Repuestos[repuestosCount + 1];
+        for (int i = 0; i < repuestosCount; ++i) {
+            temp[i] = repuestosPtr[i];
+        }
+        temp[repuestosCount] = repuesto;
+        delete[] repuestosPtr;
+        repuestosPtr = temp;
+        repuestosCount++;
         guardarRepuesto("../bin/repuestosCoches.csv");
         cout << "Repuesto insertado." << endl;
     } else {
@@ -375,57 +439,67 @@ void insertarRepuesto() {
 }
 
 void actualizarRepuesto(const string &modeloRepuesto, const string &marcaRepuesto, const string &nombreRepuesto, const string &modeloAuto) {
-    string clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
-    if (repuestosMap.find(clave) != repuestosMap.end()) {
-        Repuestos original = repuestosMap[clave];
-        Repuestos &repuesto = repuestosMap[clave];
-        cout << "Ingrese nuevos datos (marcaRepuesto, nombreRepuesto, modeloAuto, yearAuto, precioRepuesto, existencias): " << endl;
-        cin.ignore();
-        getline(cin, repuesto.marcaRepuesto);
-        getline(cin, repuesto.nombreRepuesto);
-        getline(cin, repuesto.modeloAuto);
-        cin >> repuesto.yearAuto >> repuesto.precioRepuesto >> repuesto.existencias;
+    for (int i = 0; i < repuestosCount; ++i) {
+        if (repuestosPtr[i].modeloRepuesto == modeloRepuesto && repuestosPtr[i].marcaRepuesto == marcaRepuesto && repuestosPtr[i].nombreRepuesto == nombreRepuesto && repuestosPtr[i].modeloAuto == modeloAuto) {
+            Repuestos original = repuestosPtr[i];
+            Repuestos &repuesto = repuestosPtr[i];
+            cout << "Ingrese nuevos datos (marcaRepuesto, nombreRepuesto, modeloAuto, yearAuto, precioRepuesto, existencias): " << endl;
+            cin.ignore();
+            getline(cin, repuesto.marcaRepuesto);
+            getline(cin, repuesto.nombreRepuesto);
+            getline(cin, repuesto.modeloAuto);
+            cin >> repuesto.yearAuto >> repuesto.precioRepuesto >> repuesto.existencias;
 
-        cout << "Confirma los cambios? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            guardarRepuesto("../bin/repuestosCoches.csv");
-            cout << "Cambios realizados." << endl;
-        } else {
-            repuestosMap[clave] = original;
-            cout << "Cambios revertidos." << endl;
+            cout << "Confirma los cambios? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                guardarRepuesto("../bin/repuestosCoches.csv");
+                cout << "Cambios realizados." << endl;
+            } else {
+                repuestosPtr[i] = original;
+                cout << "Cambios revertidos." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Repuesto no encontrado." << endl;
     }
+    cout << "Repuesto no encontrado." << endl;
 }
 
 void borrarRepuesto(const string &modeloRepuesto, const string &marcaRepuesto, const string &nombreRepuesto, const string &modeloAuto) {
-    string clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
-    if (repuestosMap.find(clave) != repuestosMap.end()) {
-        cout << "Esta seguro de que desea eliminar el repuesto " << modeloRepuesto << " de marca " << marcaRepuesto << "? (s/n): ";
-        char confirmacion;
-        cin >> confirmacion;
-        if (confirmacion == 's' || confirmacion == 'S') {
-            repuestosMap.erase(clave);
-            guardarRepuesto("../bin/repuestosCoches.csv");
-            cout << "Repuesto eliminado." << endl;
-        } else {
-            cout << "Eliminacion cancelada." << endl;
+    for (int i = 0; i < repuestosCount; ++i) {
+        if (repuestosPtr[i].modeloRepuesto == modeloRepuesto && repuestosPtr[i].marcaRepuesto == marcaRepuesto && repuestosPtr[i].nombreRepuesto == nombreRepuesto && repuestosPtr[i].modeloAuto == modeloAuto) {
+            cout << "Esta seguro de que desea eliminar el repuesto " << modeloRepuesto << " de marca " << marcaRepuesto << "? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                Repuestos* temp = new Repuestos[repuestosCount - 1];
+                for (int j = 0, k = 0; j < repuestosCount; ++j) {
+                    if (j != i) {
+                        temp[k++] = repuestosPtr[j];
+                    }
+                }
+                delete[] repuestosPtr;
+                repuestosPtr = temp;
+                repuestosCount--;
+                guardarRepuesto("../bin/repuestosCoches.csv");
+                cout << "Repuesto eliminado." << endl;
+            } else {
+                cout << "Eliminacion cancelada." << endl;
+            }
+            return;
         }
-    } else {
-        cout << "Repuesto no encontrado." << endl;
     }
+    cout << "Repuesto no encontrado." << endl;
 }
 
-void leerRepuestosDesdeMap() {
-    if (repuestosMap.empty()) {
+void leerRepuestosDesdeArray() {
+    if (repuestosCount == 0) {
         cout << "No hay repuestos disponibles." << endl;
         return;
     }
-    for (const auto& pair : repuestosMap) {
-        const Repuestos &repuesto = pair.second;
+    for (int i = 0; i < repuestosCount; ++i) {
+        const Repuestos &repuesto = repuestosPtr[i];
         cout << repuesto.modeloRepuesto << ", "
              << repuesto.marcaRepuesto << ", "
              << repuesto.nombreRepuesto << ", "
@@ -479,9 +553,8 @@ int main() {
                 borrarVehiculo(placa);
                 break;
             case 4:
-                // Mostrar datos de los vehículos
-                for (const auto &pair : vehiculosMap) {
-                    const Vehiculos &vehiculo = pair.second;
+                for (int i = 0; i < vehiculosCount; ++i) {
+                    const Vehiculos &vehiculo = vehiculosPtr[i];
                     cout << vehiculo.modelo
                          << ", " << vehiculo.marca
                          << ", " << vehiculo.placa
@@ -509,13 +582,13 @@ int main() {
                 borrarCliente(cedula);
                 break;
             case 8:
-                leerClientesDesdeMap();
+                leerClientesDesdeArray();
                 break;
             case 9:
                 insertarRepuesto();
                 break;
             case 10:
-            cout << "Ingrese el modelo del repuesto a actualizar: ";
+                cout << "Ingrese el modelo del repuesto a actualizar: ";
                 cin.ignore(); 
                 getline(cin, modeloRepuesto);
                 cout << "Ingrese la marca del repuesto a actualizar: ";
@@ -539,7 +612,7 @@ int main() {
                 borrarRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
                 break;
             case 12:
-                leerRepuestosDesdeMap();
+                leerRepuestosDesdeArray();
                 break;
             case 13: {
                 int subOpcion;
@@ -554,37 +627,39 @@ int main() {
                     case 1:
                         cout << "Ingrese la placa del vehiculo: ";
                         cin >> placa;
-                        if (vehiculosMap.find(placa) != vehiculosMap.end()) {
-                            const Vehiculos &vehiculo = vehiculosMap[placa];
-                            cout << vehiculo.modelo << ", "
-                                 << vehiculo.marca << ", "
-                                 << vehiculo.placa << ", "
-                                 << vehiculo.color << ", "
-                                 << vehiculo.year << ", "
-                                 << vehiculo.kilometraje << ", "
-                                 << (vehiculo.rentado ? "1" : "0") << ", "
-                                 << vehiculo.motor << ", "
-                                 << vehiculo.precioRenta << ", "
-                                 << vehiculo.cedCliente << ", "
-                                 << vehiculo.fechaEntrega << endl;
-                        } else {
-                            cout << "Vehiculo no encontrado." << endl;
+                        for (int i = 0; i < vehiculosCount; ++i) {
+                            if (vehiculosPtr[i].placa == placa) {
+                                const Vehiculos &vehiculo = vehiculosPtr[i];
+                                cout << vehiculo.modelo << ", "
+                                     << vehiculo.marca << ", "
+                                     << vehiculo.placa << ", "
+                                     << vehiculo.color << ", "
+                                     << vehiculo.year << ", "
+                                     << vehiculo.kilometraje << ", "
+                                     << (vehiculo.rentado ? "1" : "0") << ", "
+                                     << vehiculo.motor << ", "
+                                     << vehiculo.precioRenta << ", "
+                                     << vehiculo.cedCliente << ", "
+                                     << vehiculo.fechaEntrega << endl;
+                                break;
+                            }
                         }
                         break;
                     case 2:
                         cout << "Ingrese la cedula del cliente: ";
                         cin >> cedula;
-                        if (clientesMap.find(cedula) != clientesMap.end()) {
-                            const Clientes &cliente = clientesMap[cedula];
-                            cout << cliente.nombre << ", "
-                                 << cliente.apellido << ", "
-                                 << cliente.cedula << ", "
-                                 << cliente.email << ", "
-                                 << cliente.vehiculosRentados << ", "
-                                 << cliente.direccion << ", "
-                                 << (cliente.activo ? "1" : "0") << endl;
-                        } else {
-                            cout << "Cliente no encontrado." << endl;
+                        for (int i = 0; i < clientesCount; ++i) {
+                            if (clientesPtr[i].cedula == cedula) {
+                                const Clientes &cliente = clientesPtr[i];
+                                cout << cliente.nombre << ", "
+                                     << cliente.apellido << ", "
+                                     << cliente.cedula << ", "
+                                     << cliente.email << ", "
+                                     << cliente.vehiculosRentados << ", "
+                                     << cliente.direccion << ", "
+                                     << (cliente.activo ? "1" : "0") << endl;
+                                break;
+                            }
                         }
                         break;
                     case 3:
@@ -597,18 +672,18 @@ int main() {
                         getline(cin, nombreRepuesto);
                         cout << "Ingrese el modelo del carro del repuesto: ";
                         getline(cin, modeloAuto);
-                        clave = generarClaveRepuesto(modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto);
-                        if (repuestosMap.find(clave) != repuestosMap.end()) {
-                            const Repuestos &repuesto = repuestosMap[clave];
-                            cout << repuesto.modeloRepuesto << ", "
-                                 << repuesto.marcaRepuesto << ", "
-                                 << repuesto.nombreRepuesto << ", "
-                                 << repuesto.modeloAuto << ", "
-                                 << repuesto.yearAuto << ", "
-                                 << repuesto.precioRepuesto << ", "
-                                 << repuesto.existencias << endl;
-                        } else {
-                            cout<< "Repuesto no encontrado." << endl;
+                        for (int i = 0; i < repuestosCount; ++i) {
+                            if (repuestosPtr[i].modeloRepuesto == modeloRepuesto && repuestosPtr[i].marcaRepuesto == marcaRepuesto && repuestosPtr[i].nombreRepuesto == nombreRepuesto && repuestosPtr[i].modeloAuto == modeloAuto) {
+                                const Repuestos &repuesto = repuestosPtr[i];
+                                cout << repuesto.modeloRepuesto << ", "
+                                     << repuesto.marcaRepuesto << ", "
+                                     << repuesto.nombreRepuesto << ", "
+                                     << repuesto.modeloAuto << ", "
+                                     << repuesto.yearAuto << ", "
+                                     << repuesto.precioRepuesto << ", "
+                                     << repuesto.existencias << endl;
+                                break;
+                            }
                         }
                         break;
                     default:
