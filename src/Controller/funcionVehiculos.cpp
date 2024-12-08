@@ -185,3 +185,78 @@ void borrarVehiculo(const string &placa) {
     cout << "Vehiculo no encontrado." << endl;
 }
 
+void actualizarRentaVehiculo(const string &placa) {
+    for (int i = 0; i < vehiculosCount; ++i) {
+        if (vehiculosPtr[i].getPlaca() == placa) {
+            Vehiculos original = vehiculosPtr[i];
+            Vehiculos &vehiculo = vehiculosPtr[i];
+            cout << "Ingrese nuevos datos (modelo, marca, color, year, kilometraje, rentado(1/0), motor, precioRenta, cedCliente, fechaEntrega): " << endl;
+            string modelo, marca, color, motor, fechaEntrega;
+            int year, rentado, cedCliente;
+            double kilometraje, precioRenta;
+            cin >> modelo >> marca >> color >> year >> kilometraje >> rentado >> motor >> precioRenta >> cedCliente >> fechaEntrega;
+            vehiculo.setModelo(modelo);
+            vehiculo.setMarca(marca);
+            vehiculo.setColor(color);
+            vehiculo.setYear(year);
+            vehiculo.setKilometraje(kilometraje);
+            vehiculo.setRentado(rentado == 1);
+            vehiculo.setMotor(motor);
+            vehiculo.setPrecioRenta(precioRenta);
+            vehiculo.setCedCliente(cedCliente);
+            vehiculo.setFechaEntrega(fechaEntrega);
+
+            cout << "Confirma los cambios? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                // Guardar cambios en archivo
+                guardarVehiculos("../bin/coches.csv");
+                cout << "Cambios confirmados y guardados." << endl;
+            } else {
+                vehiculosPtr[i] = original;
+                cout << "Cambios revertidos." << endl;
+            }
+            return;
+        }
+    }
+    cout << "Vehiculo no encontrado." << endl;
+}
+
+void ActualizarRentaVehiculo(const string &placa) {
+    for (int i = 0; i < vehiculosCount; ++i) {
+        if (vehiculosPtr[i].getPlaca() == placa) {
+            if (vehiculosPtr[i].getRentado() == 0) {
+                Vehiculos original = vehiculosPtr[i];
+                Vehiculos &vehiculo = vehiculosPtr[i];
+                cout << "Ingrese la cedula del cliente que va a alquilar el vehiculo: " << endl;
+                int cedCliente;
+                cin >> cedCliente;
+                cout<<"Ingrese la fecha de entrega del vehiculo a rentar: "<<endl;
+                string fechaEntrega;
+                cin>> fechaEntrega;
+                vehiculo.setFechaEntrega(fechaEntrega);
+                vehiculo.setRentado(1);
+                vehiculo.setCedCliente(cedCliente);
+                cout << "Vehiculo rentado exitosamente." << endl;
+                cout << "Confirma los cambios? (s/n): ";
+            char confirmacion;
+            cin >> confirmacion;
+            if (confirmacion == 's' || confirmacion == 'S') {
+                // Guardar cambios en archivo
+                guardarVehiculos("../bin/coches.csv");
+                cout << "Cambios confirmados y guardados." << endl;
+            } else {
+                vehiculosPtr[i] = original;
+                cout << "Cambios revertidos." << endl;
+            }
+            return;
+                return; // Salir de la función después de la actualización
+            } else {
+                cout << "El vehiculo ya ha sido rentado." << endl;
+                return; // Salir de la función si el vehículo ya está rentado
+            }
+        }
+    }
+    cout << "Vehiculo no encontrado." << endl;
+}

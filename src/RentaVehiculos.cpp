@@ -5,10 +5,15 @@
 #include "./Models/Vehiculos.cpp"
 #include "./Models/clientes.cpp"
 #include "./Models/repuestos.cpp"
+#include "./Models/Usuario.cpp"
+#include "./Models/Permisos.cpp"
 #include "./Controller/funcionVehiculos.cpp"
 #include "./Controller/funcionClientes.cpp"
 #include "./Controller/funcionRepuestos.cpp"
+#include "./Controller/funcionCopias.cpp"
 #include "./views/interfaz.cpp"
+#include "./Models/Usuario.h"
+#include "./Models/Permisos.h"
 using namespace std;
 
 Vehiculos* vehiculosPtr = nullptr;
@@ -25,6 +30,32 @@ int main() {
     leerClientes("../bin/clientes.csv");
     leerRepuestos("../bin/repuestosCoches.csv");
 
+    string archivoUsuarios = "../bin/Registro.csv";
+    int cantidadUsuarios = 0;
+    Usuario* usuarios = leerUsuarios(archivoUsuarios, cantidadUsuarios);
+    Usuario usuarioActual;
+    bool usuarioEncontrado = false;
+
+    string nombreUsuario, contrasena;
+    cout << "id de usuario: ";
+    cin >> nombreUsuario;
+    cout << "password: ";
+    cin >> contrasena;
+
+    for (int i = 0; i < cantidadUsuarios; ++i) {
+        if (usuarios[i].usuario == nombreUsuario && usuarios[i].password == contrasena) {
+            usuarioActual = usuarios[i];
+            usuarioEncontrado = true;
+            break;
+        }
+    }
+    if (!usuarioEncontrado) {
+        cerr << "Credenciales incorrectas. Saliendo del programa." << endl;
+        delete[] usuarios;
+        return 1;
+    }
+    cout << "Bienvenido, " << usuarioActual.usuario << "! Rol: " << usuarioActual.rol << endl;
+
     int opcion;
     string placa;
     int cedula;
@@ -33,6 +64,10 @@ int main() {
     do {
         mostrarMenu();
         cin >> opcion;
+        if (!tienePermiso(usuarioActual.rol, opcion)) {
+            cout << "No tiene permiso para esta operacion." << endl;
+            continue;
+        }
 
         switch (opcion) {
             case 1:
@@ -117,7 +152,6 @@ int main() {
                      << "2. Consultar un Cliente" << endl
                      << "3. Consultar un Repuesto" << endl;
                 cin >> subOpcion;
-                string clave;
 
                 switch (subOpcion) {
                     case 1:
@@ -189,13 +223,52 @@ int main() {
             }
             break;
             case 14:
-                cout << "Saliendo." << endl;
+                {
+                    int subOpcion;
+                    int archivoDestino;
+                    int year, mes, dia , hora, minuto, segundo;
+                    string fechaActual = obtenerFechaActual(year, mes, dia, hora, minuto, segundo);
+                    cout << "¿A que registro desea hacerle copia de seguridad?: " << endl
+                         << "1. Vehiculos" << endl
+                         << "2. Clientes" << endl
+                         << "3. Repuestos" << endl;
+                    cin >> subOpcion;
+
+                    switch (subOpcion){
+
+                        case 1:
+                            hacerCopiaDeSeguridad("../bin/coches.csv", "../CopiasDeSeguridad");
+                            cout << "Realizando copia de seguridad..." << endl;
+                            break;
+                        case 2:
+                            hacerCopiaDeSeguridad("../bin/clientes.csv", "../CopiasDeSeguridad");
+                            cout << "Realizando copia de seguridad..." << endl;
+                            break;
+                        case 3:
+                            hacerCopiaDeSeguridad("../bin/repuestosCoches.csv", "../CopiasDeSeguridad");
+                            cout << "Realizando copia de seguridad..." << endl;
+                            break;
+                        default:
+                            cout << "Opción no válida." << endl;
+                            break;
+                    }
+                }
                 break;
+            case 15:
+                cout<<"Ingrese la placa del vehiculo a rentar: ";
+                cin>>placa;
+                ActualizarRentaVehiculo(placa);
+                break;
+
+            case 16:
+                cout<<"Saliendo...";
+                break;
+            
             default:
                 cout << "Opcion no valida." << endl;
                 break;
         }
-    } while (opcion != 14);
+    } while (opcion != 15);
 
     return 0;
 }

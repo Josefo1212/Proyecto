@@ -17,5 +17,7 @@ void mostrarMenu(){
              << "11. Borrar Repuesto" << endl
              << "12. Leer Repuestos" << endl
              << "13. Realizar consultas especificas" << endl
-             << "14. Salir" << endl;
+             << "14. Realizar copia de seguridad" <<endl
+             << "15. Rentar un Vehiculo" <<endl
+             << "16. Salir" << endl;
 }
