@@ -2,6 +2,9 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#include "./Models/Vehiculos.cpp"
+#include "./Models/clientes.cpp"
+#include "./Models/repuestos.cpp"
 #include "./Controller/funcionVehiculos.cpp"
 #include "./Controller/funcionClientes.cpp"
 #include "./Controller/funcionRepuestos.cpp"

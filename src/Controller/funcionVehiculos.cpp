@@ -3,6 +3,7 @@
 #include <sstream>
 #include <string>
 #include"../Models/Vehiculos.h"
+#pragma once
 using namespace std;
 
 extern Vehiculos* vehiculosPtr;

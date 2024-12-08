@@ -1,6 +1,7 @@
 #ifndef VEHICULOS_H
 #define VEHICULOS_H
 #include<string>
+#pragma once
 using namespace std;
 
 class Vehiculos{

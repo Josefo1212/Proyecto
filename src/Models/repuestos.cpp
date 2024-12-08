@@ -1,4 +1,5 @@
 #include"repuestos.h"
+#pragma once
  string Repuestos::getModeloRepuesto() const{return modeloRepuesto;};
 string Repuestos::getMarcaRepuesto() const{return marcaRepuesto;};
 string Repuestos::getNombreRepuesto() const{return nombreRepuesto;};

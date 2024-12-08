@@ -1,4 +1,5 @@
 #include"Vehiculos.h"
+#pragma once
 using namespace std;
 
 string Vehiculos:: getModelo() const{return modelo;};

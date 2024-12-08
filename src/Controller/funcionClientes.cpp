@@ -3,6 +3,7 @@
 #include <fstream>
 #include <sstream>
 #include <string>
+#pragma once
 using namespace std;
 
 extern Clientes* clientesPtr;

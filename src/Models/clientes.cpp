@@ -1,5 +1,5 @@
 #include"clientes.h"
-
+#pragma once
 int Clientes::getCedula() const{return cedula;};
 string Clientes::getNombre() const{return nombre;};
 string Clientes::getApellido() const{return apellido;};

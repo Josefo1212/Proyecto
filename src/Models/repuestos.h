@@ -1,6 +1,7 @@
 #ifndef REPUESTOS_H
 #define REPUESTOS_H
 #include<string>
+#pragma once
 using namespace std;
 
 class Repuestos{

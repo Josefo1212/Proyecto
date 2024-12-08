@@ -1,6 +1,6 @@
 #ifndef CLIENTES_H
 #define CLIENTES_H
-
+#pragma once
 #include<iostream>
 using namespace std;
 
