@@ -11,6 +11,7 @@
 #include "./Controller/funcionClientes.cpp"
 #include "./Controller/funcionRepuestos.cpp"
 #include "./Controller/funcionCopias.cpp"
+#include "./Controller/funcionAdmin.cpp"
 #include "./views/interfaz.cpp"
 #include "./Models/Usuario.h"
 #include "./Models/Permisos.h"
@@ -260,15 +261,36 @@ int main() {
                 ActualizarRentaVehiculo(placa);
                 break;
 
-            case 16:
+            case 16: {
+    string nombre, password, rol;
+    cout << "Ingrese el nombre del usuario nuevo: ";
+    cin >> nombre;
+    cout << "Ingrese la contrasena del usuario nuevo: ";
+    cin >> password;
+    cout << "Ingrese el rol del nuevo usuario (admin, manager, empleado): ";
+    cin >> rol;
+
+    // Llamar a la función agregarUsuario y manejar el resultado
+    if (agregarUsuario("../bin/Registro.csv", nombre, password, rol)) {
+        cout << "Usuario agregado exitosamente." << endl;
+    } else {
+        cout << "Error al agregar el usuario." << endl;
+    }
+    break;
+}
+
+
+
+            case 17:
                 cout<<"Saliendo...";
+                return 0;
                 break;
             
             default:
                 cout << "Opcion no valida." << endl;
                 break;
         }
-    } while (opcion != 15);
+    } while (opcion != 17);
 
     return 0;
 }
