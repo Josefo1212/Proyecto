@@ -2,10 +2,9 @@
 #include <fstream>
 #include <ctime>
 #include <string>
-
+#pragma once
 using namespace std;
 
-// Función para obtener la fecha actual por separado
 string obtenerFechaActual(int &year, int &mes, int &dia, int &hora, int &minuto, int &segundo) {
     time_t ahora = time(0);
     tm* tiempoLocal = localtime(&ahora);
@@ -17,7 +16,6 @@ string obtenerFechaActual(int &year, int &mes, int &dia, int &hora, int &minuto,
     segundo = tiempoLocal->tm_sec;
 }
 
-// Función para realizar la copia de seguridad
 bool hacerCopiaDeSeguridad(const string& archivoOrigen, const string& CarpetaDestino) {
     int year, mes, dia, hora, minuto, segundo;
     obtenerFechaActual(year, mes, dia, hora, minuto, segundo);
@@ -26,7 +24,6 @@ bool hacerCopiaDeSeguridad(const string& archivoOrigen, const string& CarpetaDes
     snprintf(buffer, sizeof(buffer), "%04d%02d%02d_%02d%02d%02d", year, mes, dia, hora, minuto, segundo);
     string fechaActual(buffer);
 
-    // Extraer solo el nombre del archivo (sin la ruta)
     string nombreArchivo = archivoOrigen.substr(archivoOrigen.find_last_of("/\\") + 1);
     string archivoDestino = CarpetaDestino + "/" + nombreArchivo + "_" + fechaActual;
 

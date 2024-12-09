@@ -63,7 +63,7 @@ int main() {
     string modeloRepuesto, marcaRepuesto, nombreRepuesto, modeloAuto;
 
     do {
-        mostrarMenu();
+        mostrarMenu(usuarioActual.rol);
         cin >> opcion;
         if (!tienePermiso(usuarioActual.rol, opcion)) {
             cout << "No tiene permiso para esta operacion." << endl;
@@ -229,7 +229,7 @@ int main() {
                     int archivoDestino;
                     int year, mes, dia , hora, minuto, segundo;
                     string fechaActual = obtenerFechaActual(year, mes, dia, hora, minuto, segundo);
-                    cout << "¿A que registro desea hacerle copia de seguridad?: " << endl
+                    cout << "A que registro desea hacerle copia de seguridad?: " << endl
                          << "1. Vehiculos" << endl
                          << "2. Clientes" << endl
                          << "3. Repuestos" << endl;
@@ -250,7 +250,7 @@ int main() {
                             cout << "Realizando copia de seguridad..." << endl;
                             break;
                         default:
-                            cout << "Opción no válida." << endl;
+                            cout << "Opcion no valida." << endl;
                             break;
                     }
                 }
@@ -262,25 +262,21 @@ int main() {
                 break;
 
             case 16: {
-    string nombre, password, rol;
-    cout << "Ingrese el nombre del usuario nuevo: ";
-    cin >> nombre;
-    cout << "Ingrese la contrasena del usuario nuevo: ";
-    cin >> password;
-    cout << "Ingrese el rol del nuevo usuario (admin, manager, empleado): ";
-    cin >> rol;
+                string nombre, password, rol;
+                cout << "Ingrese el nombre del usuario nuevo: ";
+                cin >> nombre;
+                cout << "Ingrese la password del usuario nuevo: ";
+                cin >> password;
+                cout << "Ingrese el rol del nuevo usuario (admin, manager, empleado): ";
+                cin >> rol;
 
-    // Llamar a la función agregarUsuario y manejar el resultado
-    if (agregarUsuario("../bin/Registro.csv", nombre, password, rol)) {
-        cout << "Usuario agregado exitosamente." << endl;
-    } else {
-        cout << "Error al agregar el usuario." << endl;
-    }
-    break;
+                if (agregarUsuario("../bin/Registro.csv", nombre, password, rol)) {
+                                cout << "Usuario agregado exitosamente." << endl;
+                } else {
+                                cout << "Error al agregar el usuario." << endl;
+                }
+                break;
 }
-
-
-
             case 17:
                 cout<<"Saliendo...";
                 return 0;

@@ -1,4 +1,5 @@
 #include "permisos.h"
+#pragma once
 
 bool tienePermiso(const string& rol, int opcion) {
     if (rol == "admin") {

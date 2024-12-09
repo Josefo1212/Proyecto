@@ -1,6 +1,7 @@
 #include "Usuario.h"
 #include <stdexcept>
 #include <iostream>
+#pragma once
 
 int contarLineas(const string& archivo) {
     ifstream archivoEntrada(archivo);
@@ -28,7 +29,7 @@ Usuario* leerUsuarios(const string& archivo, int& cantidadUsuarios) {
     }
 
     while (getline(archivoEntrada, linea)) {
-        if (linea.empty()) continue; // Saltar líneas vacías
+        if (linea.empty()) continue;
         stringstream ss(linea);
         string usuario, password, rol;
         getline(ss, usuario, ',');
@@ -36,11 +37,10 @@ Usuario* leerUsuarios(const string& archivo, int& cantidadUsuarios) {
         getline(ss, rol, ',');
 
         if (usuario.empty() || password.empty() || rol.empty()) {
-            cerr << "Error: Campos vacíos en la linea " << index + 1 << endl;
+            cerr << "Error: Campos vacios en la linea " << index + 1 << endl;
             continue;
         }
 
-        // Asignar valores a la estructura Usuario
         usuarios[index].usuario = usuario;
         usuarios[index].rol = rol;
         usuarios[index].password = password;
